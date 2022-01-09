@@ -1,53 +1,45 @@
 
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { StyleSheet, Text, View, TextInput, Button, FlatList, Pressable, Modal} from 'react-native';
+import AddTodo from './components/AddTodo';
+import TodoItem from './components/TodoItem';
+// import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 export default function App() {
-  const [newTodo, setNewTodo] = useState('')
   const [todoList, setTodoList] = useState([])
+  const [shouldModalBool, setShouldModalBool] = useState(false)
 
-  const mochTodos = [
-    'sdfsdfsdfsdf',
-    'dfghfdhh',
-    'sdfsdfscvbnvcbndfsdf',
-    'cvbnvcn',
-  ]
-
-  const handleTodoChange = (givenTodoText) => {
-    setNewTodo(givenTodoText)
+  const handleAddTodo = (givenTodo) => {
+    setTodoList(latestTodoList => [...latestTodoList, givenTodo])
+    // setNewTodo('')
+    setShouldModalBool(false)
   }
 
-  const handleAddTodo = () => {
-    setTodoList(latestTodoList => [...latestTodoList, newTodo])
-    setNewTodo('')
-  }
-  
   useEffect(()=> {
     console.log({todoList});
   }, [])
 
   return (
     <View style={styles.container}>
-      <View style={styles.addTodoSection}>
-        <TextInput 
-          placeholder='Enter your goals'
-          style={styles.inputBox}
-          value={newTodo}
-          onChangeText={setNewTodo}
-        />
-        <Button title="Add Todo" onPress={handleAddTodo}/>
-      </View>
-
+      <AddTodo 
+        visible={shouldModalBool}
+        handleAddTodo={handleAddTodo}
+        setShouldModalBool={setShouldModalBool}
+      />
+      <Pressable style={styles.button} onPress={()=>setShouldModalBool(true)}>
+        <Text style={styles.text}>Add New Todo</Text>
+      </Pressable>
 
       <View >
-        {todoList.map( todoName => (
-          <View key={todoName} style={styles.todoItem}>
-            <Text>{todoName}</Text>
-          </View>
-        ) 
-        )}
+        <FlatList 
+          data={todoList}
+          renderItem={(item) => (
+            <TodoItem 
+              todoName={item.item}
+            />
+          )} 
+        />
       </View>
 
 
@@ -64,21 +56,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'center',
   },
-  inputBox: {
-    flex: 0.8,
-    borderWidth: 2,
-    borderColor: 'black',
-    padding: 5
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
-  addTodoSection: {
-    flexDirection: 'row'
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    backgroundColor: 'black',
   },
-  todoItem: {
-    marginVertical: 10,
-    backgroundColor: '#a3c2c2',
-    minWidth: '80%',
-    flexDirection: 'row',
-    padding: 10 ,
-    // flex: 1
-  }
 });
