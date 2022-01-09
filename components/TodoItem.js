@@ -3,8 +3,8 @@ import { StyleSheet, Text, View } from 'react-native'
 
 const TodoItem = (props) => {
     return (
-        <View style={styles.todoItem}>
-            <Text>{props.todoName}</Text>
+        <View style={styles.todoItem} onTouchStart={props.onDelete}>
+            <Text >{props.todoName}</Text>
         </View>
     )
 }

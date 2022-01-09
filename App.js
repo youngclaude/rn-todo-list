@@ -11,9 +11,15 @@ export default function App() {
   const [shouldModalBool, setShouldModalBool] = useState(false)
 
   const handleAddTodo = (givenTodo) => {
-    setTodoList(latestTodoList => [...latestTodoList, givenTodo])
-    // setNewTodo('')
+    // add a new object every-time 
+    setTodoList(latestTodoList => [...latestTodoList, 
+      {id: Math.random().toString(), value: givenTodo}])
     setShouldModalBool(false)
+  }
+  const handleDeleteClick = (givenId) => {
+    setTodoList( latestTodoList => latestTodoList.filter( (todoObj) => {
+      return todoObj.id !=  givenId
+    }) )
   }
 
   useEffect(()=> {
@@ -33,10 +39,12 @@ export default function App() {
 
       <View >
         <FlatList 
+          keyExtractor={(item)=> item.id}
           data={todoList}
           renderItem={(item) => (
             <TodoItem 
-              todoName={item.item}
+              todoName={item.item.value}
+              onDelete={() => handleDeleteClick(item.item.id)}
             />
           )} 
         />

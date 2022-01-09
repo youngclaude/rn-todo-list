@@ -11,6 +11,11 @@ const AddTodo = (props) => {
         setNewTodo('')
     }
 
+    const handleCancel = () => {
+        props.setShouldModalBool(false)
+        setNewTodo('')
+    }
+
     return (
     <Modal visible={props.visible}>
         <View style={styles.model}>
@@ -24,7 +29,7 @@ const AddTodo = (props) => {
                 {/* <Button title="Add Todo" /> */}
             </View>
             <View style={styles.actionBtns}>
-                <Pressable onPress={()=>props.setShouldModalBool(false)} style={{...styles.actionBtn, backgroundColor: 'red'}}>
+                <Pressable onPress={handleCancel} style={{...styles.actionBtn, backgroundColor: 'red'}}>
                     <Text style={styles.text}>Close Modal</Text>
                 </Pressable> 
                 <Pressable onPress={handleTodoSubmit } style={{...styles.actionBtn,backgroundColor: 'blue'}}>
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 0.8,
     borderWidth: 2,
     borderColor: 'black',
-    padding: 5
+    padding: 15
   },
   text: {
     fontSize: 16,
